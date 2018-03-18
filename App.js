@@ -1,100 +1,28 @@
-import React from 'react';
-import { FlatList, Image, StyleSheet, TouchableHighlight, ActivityIndicator, Text, View  } from 'react-native';
+import React, { Component } from "react";
+import { View } from "react-native";
+import { Container, Content, Picker, Button, Text } from "native-base";
+import Expo from "expo";
 
-export default class FetchExample extends React.Component {
-
-  constructor(props){
-    super(props);
-    this.state ={ isLoading: true}
+import HomeScreen from "./src/HomeScreen/index.js";
+export default class AwesomeApp extends Component {
+  constructor() {
+    super();
+    this.state = {
+      isReady: false
+    };
   }
-
-  componentDidMount(){
-    return fetch('http://jobseekers.picom.su/profile/list?access-token=.P31mFqltVsAUAJY8Fs_BsxpELEYSOyGa0xKOJUsjm0ISzLLOlNliDab2FJ-0noHn&page=1')
-      .then((response) => response.json())
-      .then((responseJson) => {
-
-        this.setState({
-          isLoading: false,
-          dataSource: responseJson.data,
-        }, function(){
-
-        });
-
-      })
-      .catch((error) =>{
-        console.error(error);
-      });
+  async componentWillMount() {
+    await Expo.Font.loadAsync({
+      Roboto: require("native-base/Fonts/Roboto.ttf"),
+      Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+      Ionicons: require("native-base/Fonts/Ionicons.ttf")
+    });
+    this.setState({ isReady: true });
   }
-
-
-
-  render(){
-
-    if(this.state.isLoading){
-      return(
-        <View style={styles.body}>
-          <ActivityIndicator style={styles.preloader} size="large" color="#4871ff"/>
-        </View>
-      )
+  render() {
+    if (!this.state.isReady) {
+      return <Expo.AppLoading />;
     }
-
-    return(
-      <View style={styles.body}>
-        <FlatList
-          data={this.state.dataSource}
-          keyExtractor={(item, index) => index}
-          renderItem={({item, separators}) => (
-            <View style={styles.tableItem}>
-              <Image
-                style={styles.tableItemImage}
-                source={{uri: item.image}}
-              />
-              <View style={styles.tableItemInfo}>
-                <Text style={styles.tableItemName}>
-                  {item.name} {item.surname}
-                </Text>
-                <Text style={styles.tableItemSpecialization}>
-                  {item.specialization.length ? item.specialization : 'Специализация не выбрана'}
-                </Text>
-              </View>
-            </View>
-          )}
-        />
-      </View>
-    );
+    return <HomeScreen />;
   }
 }
-
-const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    paddingTop: 20,
-    justifyContent: 'center'
-  },
-  preloader: {
-    alignSelf: 'center'
-  },
-  tableItem: {
-    flex: 1,
-    padding: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    borderBottomColor: '#e9ecf3',
-    borderBottomWidth: 1
-  },
-  tableItemImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
-  },
-  tableItemInfo: {
-    marginLeft: 10
-  },
-  tableItemName: {
-    fontSize: 20
-  },
-  tableItemSpecialization: {
-    fontSize: 15
-  }
-});
