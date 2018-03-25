@@ -23,9 +23,19 @@ import {
   FooterTab,
   Label
 } from "native-base";
+import { Calendar, CalendarList, Agenda, LocaleConfig } from 'react-native-calendars';
 import HomeScreen from "../HomeScreen";
 
-export default class Calendar extends React.Component {
+LocaleConfig.locales['ru'] = {
+  monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
+  monthNamesShort: ['Янв.','Фев.','Март','Апр.','Май','Июнь','Июль','Авг.','Сент.','Окт.','Нояб.','Декаб.'],
+  dayNames: ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье'],
+  dayNamesShort: ['Пн.','Вт.','Ср.','Чт.','Пт.','Сб.','Вс.']
+};
+ 
+LocaleConfig.defaultLocale = 'ru';
+
+export default class CalendarScreen extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
@@ -45,7 +55,14 @@ export default class Calendar extends React.Component {
           <Right />
         </Header>
         <Content padder>
-          <Text>Календарь</Text>
+        <Calendar
+          onDayPress={(day) => {console.log('selected day', day)}}
+          monthFormat={'MMMM yyyy'}
+          onMonthChange={(month) => {console.log('month changed', month)}}
+          firstDay={0}
+          onPressArrowLeft={substractMonth => substractMonth()}
+          onPressArrowRight={addMonth => addMonth()}
+        />
         </Content>
       </Container>
     );
