@@ -1,7 +1,10 @@
 import React from "react";
+import {path, token} from "../../config/Config";
+
+import styles from './styles';
+
 import { 
   StatusBar,
-  StyleSheet,
   View,
   Text,
   FlatList,
@@ -31,7 +34,7 @@ export default class HomeScreen extends React.Component {
   }
 
   componentDidMount(){
-    return fetch('http://jobseekers.picom.su/profile/list?access-token=.P31mFqltVsAUAJY8Fs_BsxpELEYSOyGa0xKOJUsjm0ISzLLOlNliDab2FJ-0noHn&page=1')
+    return fetch(`${path}/profile/list?${token}`)
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -98,32 +101,3 @@ export default class HomeScreen extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  preloader: {
-    alignSelf: 'center'
-  },
-  tableItem: {
-    flex: 1,
-    padding: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    borderBottomColor: '#e9ecf3',
-    borderBottomWidth: 1
-  },
-  tableItemImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
-  },
-  tableItemInfo: {
-    marginLeft: 10
-  },
-  tableItemName: {
-    fontSize: 20
-  },
-  tableItemSpecialization: {
-    fontSize: 15
-  }
-});
